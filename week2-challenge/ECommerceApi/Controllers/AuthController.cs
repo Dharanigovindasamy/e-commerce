@@ -45,7 +45,11 @@ namespace ECommerceApi.Controllers
             if (user == null || !BCrypt.Net.BCrypt.Verify(login.PasswordHash, user.PasswordHash))
                 return Unauthorized("Invalid credentials");
             var token = GenerateJwtToken(user);
-            return Ok(new { token });
+            return Ok(new { 
+                token, 
+                email = user.Email, 
+                username = user.Username // or user.Name, adjust as per your model
+            });
         }
 
         private string GenerateJwtToken(User user)

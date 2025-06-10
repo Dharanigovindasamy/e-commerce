@@ -1,13 +1,7 @@
-import axios from 'axios';
+import createApiClient from './apiFactory';
 
-const instance = axios.create({
-  baseURL: 'http://localhost:5031/api', // Change to your backend URL/port
-});
+const api = createApiClient('http://localhost:5031/api/');
 
-instance.interceptors.request.use(config => {
-  const token = localStorage.getItem('token');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
+export const getProducts = () => api.get('product');
 
-export default instance; 
+export default api; 

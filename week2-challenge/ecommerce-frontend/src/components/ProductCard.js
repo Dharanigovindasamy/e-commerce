@@ -1,10 +1,12 @@
-import React, { useContext } from 'react';
-import { CartContext } from '../store/CartContext';
+import React, { useState } from 'react';
+import { useCart } from '../store/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { isLoggedIn } from '../utils/auth';
 
 export default function ProductCard({ product }) {
-  const { addToCart } = useContext(CartContext);
+  const { addToCart } = useCart();
+  const [added, setAdded] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const navigate = useNavigate();
 
   const handleAddToCart = () => {
@@ -13,7 +15,9 @@ export default function ProductCard({ product }) {
       return;
     }
     addToCart(product);
-    navigate('/payment', { state: { amount: product.price } });
+    setAdded(true);
+    setShowMsg(true);
+    setTimeout(() => setShowMsg(false), 1500); // Hide message after 1.5s
   };
 
   const handleBuyNow = () => {
@@ -33,13 +37,26 @@ export default function ProductCard({ product }) {
         <p className="card-text">{product.description}</p>
         <p className="card-text"><strong>${product.price}</strong></p>
         <div className="d-flex justify-content-between">
-        <button className="btn btn-primary" onClick={() => handleAddToCart(product)}>
-          <i className="bi bi-cart-plus"></i> Add to Cart
-        </button>
-        <button className="btn btn-secondary" onClick={() => handleBuyNow(product)}>
-          Buy Now
-        </button>
+          <button
+            className="btn"
+            style={{
+              backgroundColor: added ? '#28a745' : '#007bff',
+              color: '#fff'
+            }}
+            onClick={handleAddToCart}
+            disabled={added}
+          >
+            <i className="bi bi-cart-plus"></i> {added ? 'Added' : 'Add to Cart'}
+          </button>
+          <button className="btn btn-secondary" onClick={() => handleBuyNow(product)}>
+            Buy Now
+          </button>
         </div>
+        {showMsg && (
+          <div className="alert alert-success mt-2 p-1 text-center" style={{ fontSize: '0.9em' }}>
+            Added to cart successfully!
+          </div>
+        )}
       </div>
     </div>
   );

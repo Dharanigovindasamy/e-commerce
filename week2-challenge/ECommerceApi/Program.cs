@@ -6,6 +6,10 @@ using System.Text;
 using FluentValidation.AspNetCore;
 using ECommerceApi.Validators;
 using FluentValidation;
+using ECommerceApi.Services;
+using System.Data.Common;
+using ECommerceApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -47,6 +51,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddValidatorsFromAssemblyContaining<UserValidator>();
+builder.Services.AddSingleton<PaymentService>();
+builder.Services.AddSingleton<EmailNotificationService>();
+builder.Services.AddSingleton<IDbConnectionFactory, PostgresConnectionFactory>();
+builder.Services.AddScoped<ProductService>();
 
 var app = builder.Build();
 
@@ -61,4 +69,9 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+var paymentService = app.Services.GetRequiredService<PaymentService>();
+var emailService = app.Services.GetRequiredService<EmailNotificationService>();
+emailService.Subscribe(paymentService);
+
 app.Run();

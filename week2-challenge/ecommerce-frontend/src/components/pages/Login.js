@@ -3,10 +3,12 @@ import axios from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useUser } from '../../store/UserContext';
 
 export default function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { user, setUser } = useUser();
 
   const formik = useFormik({
     initialValues: { email: '', passwordHash: '' },
@@ -17,9 +19,15 @@ export default function Login() {
     onSubmit: async (values) => {
       try {
         const res = await axios.post('http://localhost:5031/api/auth/login', values);
+        console.log("user values", values);
         localStorage.setItem('token', res.data.token);
-        console.log("Login successful", res);
-        navigate('/main');
+        console.log("Login successful", res.data);
+        setUser({
+          email: res.data.email,
+          username: res.data.username
+        });
+        console.log("User after login:", res.data.user);
+        navigate('/payment');
       } catch (err) {
         setError('Invalid credentials', err);
       }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dharani.govindhasamy\\Downloads\\week2-challenge\\ECommerceApi\\ECommerceApi.csproj": {}
+    "C:\\Users\\dharani.govindhasamy\\Desktop\\ai-challenge\\week2-challenge\\ECommerceApi\\ECommerceApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dharani.govindhasamy\\Downloads\\week2-challenge\\ECommerceApi\\ECommerceApi.csproj": {
+    "C:\\Users\\dharani.govindhasamy\\Desktop\\ai-challenge\\week2-challenge\\ECommerceApi\\ECommerceApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dharani.govindhasamy\\Downloads\\week2-challenge\\ECommerceApi\\ECommerceApi.csproj",
+        "projectUniqueName": "C:\\Users\\dharani.govindhasamy\\Desktop\\ai-challenge\\week2-challenge\\ECommerceApi\\ECommerceApi.csproj",
         "projectName": "ECommerceApi",
-        "projectPath": "C:\\Users\\dharani.govindhasamy\\Downloads\\week2-challenge\\ECommerceApi\\ECommerceApi.csproj",
+        "projectPath": "C:\\Users\\dharani.govindhasamy\\Desktop\\ai-challenge\\week2-challenge\\ECommerceApi\\ECommerceApi.csproj",
         "packagesPath": "C:\\Users\\dharani.govindhasamy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dharani.govindhasamy\\Downloads\\week2-challenge\\ECommerceApi\\obj\\",
+        "outputPath": "C:\\Users\\dharani.govindhasamy\\Desktop\\ai-challenge\\week2-challenge\\ECommerceApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dharani.govindhasamy\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -64,17 +64,23 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[9.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.1, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[9.0.4, )"
             },
             "Serilog.AspNetCore": {
               "target": "Package",

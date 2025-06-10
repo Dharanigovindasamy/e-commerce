@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Payment.css';
+import axios from 'axios';
+
+import { useUser } from '../../store/UserContext';
+import { useCart } from '../../store/CartContext';
+
 
 export default function Payment({ amount = 999 }) {
   const [paymentMode, setPaymentMode] = useState('');
@@ -13,6 +18,18 @@ export default function Payment({ amount = 999 }) {
   const [result, setResult] = useState('');
   const [retry, setRetry] = useState(false);
   const navigate = useNavigate();
+  const { user } = useUser();
+  const { cartItems } = useCart();
+  const cartProduct = cartItems[0];
+
+  if (!user) {
+    console.log("User not found");
+    return <div>Please log in to proceed with payment.</div>;
+  }
+
+  console.log("Cart Items:", cartItems);
+  console.log("Cart Product:", cartProduct);
+  console.log("User:", user);
 
   const validate = () => {
     const errs = {};
@@ -48,18 +65,31 @@ export default function Payment({ amount = 999 }) {
     return Object.keys(errs).length === 0;
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     const errs = validate();
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
     // Simulate payment process
     setResult('');
     setRetry(false);
-    setTimeout(() => {
-      // If all fields are valid, payment is successful
-      setResult('success');
-      navigate('/payment-success');
-    }, 1200);
+    try {
+      const response = await axios.post('http://localhost:5031/api/payment', {
+        email: user.email,
+        product: cartProduct.title,
+        price: cartProduct.price
+      });
+      if (response.data.status === 'success') {
+        setResult('success');
+        navigate('/payment-success');
+      } else {
+        setResult('failure');
+        navigate('/payment-failure');
+      }
+    } catch (error) {
+      console.error('Error confirming payment:', error);
+      setResult('failure');
+      navigate('/payment-failure');
+    }
   };
 
   const handleRetry = () => {

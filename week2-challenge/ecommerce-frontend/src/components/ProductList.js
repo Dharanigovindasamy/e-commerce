@@ -54,9 +54,15 @@ export default function ProductList({ category }) {
       setProducts([]);
       setMessage('No open API available for this category.');
     } else {
-      axios.get('/product').then(res => {
-        setProducts(res.data);
-      });
+      const fetchProducts = async () => {
+        try {
+          const data = await axios.get('/product');
+          setProducts(Array.isArray(data) ? data : []);
+        } catch (e) {
+          setProducts([]); // fallback on error
+        }
+      };
+      fetchProducts();
     }
   }, [category]);
   return (

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar';
 import Sidebar from '../Sidebar';
 import ProductList from '../ProductList';
+import { useCart } from '../../store/CartContext';
+import api from '../../services/api';
 
 const categories = [
   { key: 'electronics', label: 'Electronics', logo: '💻' },
@@ -19,6 +21,9 @@ const categories = [
 export default function MainPage() {
   const location = useLocation();
   const [category, setCategory] = useState(null);
+  const { addToCart } = useCart();
+  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
 
   // Read 'search' query from URL
   useEffect(() => {
@@ -29,10 +34,23 @@ export default function MainPage() {
     }
   }, [location.search]);
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const products = await api.get('product');
+      setProducts(products);
+    };
+    fetchProducts();
+  }, []);
+
   // Handler for clicking category buttons
   const handleCategoryClick = (catKey) => {
     setCategory(catKey);
     window.history.replaceState(null, '', `/main?search=${encodeURIComponent(catKey)}`);
+  };
+
+  const handleAddToCart = (product) => {
+    addToCart(product);
+    navigate('/cart');
   };
 
   return (

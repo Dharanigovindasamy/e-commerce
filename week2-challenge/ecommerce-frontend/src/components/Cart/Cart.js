@@ -2,23 +2,25 @@ import React, { useContext } from 'react';
 import { CartContext } from '../../store/CartContext';
 import { useNavigate } from 'react-router-dom';
 import './Cart.css';
+import { useCart, CartProvider } from '../../store/CartContext';
 
 export default function Cart() {
-  const { cart, clearCart } = useContext(CartContext);
+  const { cartItems } = useCart();
   const navigate = useNavigate();
 
-  const totalAmount = cart.reduce((sum, item) => sum + (item.price || 0), 0);
+  const totalAmount = cartItems.reduce((sum, item) => sum + (item.price || 0), 0);
 
-  const handleConfirm = () => {
-    clearCart();
-    navigate('/payment', { state: { amount: totalAmount } });
+  const handleProceed = () => {
+    if (window.confirm('Do you want to proceed to payment?')) {
+      navigate('/payment');
+    }
   };
 
   const handleCancel = () => {
     navigate('/main');
   };
 
-  if (cart.length === 0) {
+  if (cartItems.length === 0) {
     return <div className="cart-container"><h3>Your cart is empty.</h3></div>;
   }
 
@@ -26,7 +28,7 @@ export default function Cart() {
     <div className="cart-container">
       <h2>Your Cart</h2>
       <ul className="cart-list">
-        {cart.map((item, idx) => (
+        {cartItems.map((item, idx) => (
           <li key={idx} className="cart-item">
             <img src={item.imageUrl} alt={item.name} className="cart-img" />
             <div>
@@ -38,7 +40,7 @@ export default function Cart() {
       </ul>
       <div className="cart-total">Total: <strong>₹{totalAmount}</strong></div>
       <div className="cart-actions">
-        <button className="btn btn-success" onClick={handleConfirm}>Confirm & Place Order</button>
+        <button className="btn btn-success" onClick={handleProceed}>Proceed to Payment</button>
         <button className="btn btn-outline-secondary" onClick={handleCancel}>Cancel</button>
       </div>
     </div>
